@@ -1,9 +1,13 @@
 "use client"
 import { generateRandomId } from '@/utils/getrandomid';
+import { useUserIdStore } from '@/utils/store';
 import axios from 'axios';
 import React, {useState} from 'react'
 
 export default function page() {
+
+  const {userId} = useUserIdStore();
+  console.log('userId->', userId);
 
   const [eventName, setEventName] = useState('');
   const [eventDesc, setEventDesc] = useState('');
@@ -23,16 +27,22 @@ export default function page() {
 
     const startTime = `${correctDate}T${startHr}:00:00.000`;
     const endTime = `${correctDate}T${endHr}:00:00.000`;
-
-    const res = await axios.post('http://localhost:8000/create_event', {
-        summary: eventName,
-        description: eventDesc,
-        timeZone: "Asia/Kolkata",
-        eventLink: `http://localhost:3000/schedule_event/${randomId}`,
-        startDateTime: startTime,
-        endDateTime: endTime,
-    });
-    console.log('event post result', res);
+    try {
+        const user = await axios.get(`/api/get_user/${userId}`);
+        const res = await axios.post('/api/create_event', {
+            summary: eventName,
+            description: eventDesc,
+            timeZone: "Asia/Kolkata",
+            eventLink: `http://localhost:3000/schedule_event/${randomId}`,
+            startDateTime: startTime,
+            endDateTime: endTime,
+            owner: user.data.user.email,
+            flag: true,
+        });
+        console.log('event post result', res);
+    } catch (error) {
+        console.error('Error:', error);
+    }
   }
 
   const generateDateOptions = () => {

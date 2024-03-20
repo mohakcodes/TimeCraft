@@ -1,4 +1,5 @@
 "use client"
+import { useUserIdStore } from '@/utils/store';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
@@ -7,9 +8,11 @@ export default function page() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const {userId} = useUserIdStore();
+
   const getEvents = async() => {
     try {
-        const res = await axios.get('http://localhost:8000/all_events');
+        const res = await axios.get('/api/all_events');
         setEvents(res.data);
         setLoading(false);
     } 
@@ -45,13 +48,18 @@ export default function page() {
 
   const BookEvent = async(e:any,event:any) => {
     e.preventDefault();
+    const user = await axios.get(`/api/get_user/${userId}`);
     try {
-        const res = await axios.post('http://localhost:8000/schedule_event', {
+        const res = await axios.post('/api/schedule_event', {
             summary: event.summary,
             description: event.description,
             timeZone: event.timeZone,
             startDateTime: event.startDateTime,
             endDateTime: event.endDateTime,
+            owner: event.owner,
+            attendee: user.data.user.email,
+            oauth2Client: user.data.user.oauth2Client,
+            calendar: user.data.user.calendar
         });
         console.log('event post result', res);
     } 
@@ -71,6 +79,7 @@ export default function page() {
                         <p className='text-lg'>{event.description}</p>
                         <p className='text-lg'>Date - {formatDate(event.startDateTime)}</p>
                         <p className='text-lg'>From - {formatTime(event.startDateTime)} to {formatTime(event.endDateTime)}</p>
+                        <p className='text-lg'>Organizer - {event.owner}</p>
                         <button 
                             className='bg-blue-100 p-1 rounded-lg border-2 border-black'
                             onClick={(e)=>BookEvent(e,event)}

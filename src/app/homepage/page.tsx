@@ -1,30 +1,35 @@
 "use client"
 
+import { useUserIdStore } from '@/utils/store';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import React from 'react'
 
 export default function page() {
 
-  const handleClick = async(e:any) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const {userId,setUserId} = useUserIdStore();
+
+  const createEvent = async(e:any) => {
     e.preventDefault();
-    try {
-      console.log('clicked');
-      const res = await axios.get('http://localhost:8000/schedule_event');
-      console.log('res', res);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    setUserId(searchParams.get('id') || '');
+    console.log('searchParams', searchParams.get('id'));
+    router.push('/userevent');
   }
 
-  const router = useRouter();
+  const getAllEvents = async(e:any) => {
+    e.preventDefault();
+    setUserId(searchParams.get('id') || '');
+    console.log('searchParams', searchParams.get('id'));
+    router.push('/all_events')
+  }
 
   return (
     <div className='flex flex-col items-center'>
         <h1 className='flex items-center text-black text-2xl'>Welcome to the homepage</h1>
-        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={(e)=>handleClick(e)}>Schedule Event</button>
-        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={()=>router.push('/userevent')}>Create Event</button>
-        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={()=>router.push('/all_events')}>All Events</button>
+        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={(e)=>createEvent(e)}>Create Event</button>
+        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={(e)=>getAllEvents(e)}>All Events</button>
     </div>
   )
 }

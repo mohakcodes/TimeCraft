@@ -5,13 +5,15 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'; 
 
 export default function page() { 
+
   const router = useRouter();
 
   const caller = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/google');
-      console.log('res', res.data);
-      router.push(res.data);
+      const res = await axios.get('api/google');
+      console.log("res",res.data);
+      localStorage.setItem('oauth2Client', JSON.stringify(res.data.oauth2Client));
+      router.push(res.data.url);
     } 
     catch (error) {
       console.error('Error:', error);
