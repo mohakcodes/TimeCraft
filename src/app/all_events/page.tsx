@@ -75,7 +75,8 @@ export default function page() {
                         <p className='text-xl font-bold'>{event.summary}</p>
                         <p className='text-lg'>{event.description}</p>
                         <p className='text-lg'>Date - {formatDate(event.startDateTime)}</p>
-                        <p className='text-lg'>From - {formatTime(event.startDateTime)} to {formatTime(event.endDateTime)}</p>
+                        <p className='text-lg'>Starts From - {formatTime(event.startDateTime)}</p>
+                        <p className='text-lg'>Duration - 1 Hour</p>
                         <p className='text-lg'>Organizer - {event.owner}</p>
                         <button 
                             className='bg-blue-100 p-1 rounded-lg border-2 border-black'

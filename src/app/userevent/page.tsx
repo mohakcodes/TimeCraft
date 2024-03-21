@@ -29,16 +29,14 @@ export default function page() {
     const localeStartTime = dayjs(startTime).tz(timeZoneOfUser).format();
 
     try {
-        const user = await axios.get(`/api/get_user/${userId}`);
         const res = await axios.post('/api/create_event', {
             summary: eventName,
             description: eventDesc,
             timeZone: "Asia/Kolkata",
             eventLink: `http://localhost:3000/schedule_event/${randomId}`,
             startDateTime: localeStartTime,
-            owner: user.data.user.email,
             flag: true,
-            access_token: user.data.user.access_token,
+            userId: userId,
         });
         console.log('event post result', res);
     } catch (error) {
