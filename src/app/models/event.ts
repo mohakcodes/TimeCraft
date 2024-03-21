@@ -21,10 +21,6 @@ const eventSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    endDateTime:{
-        type: String,
-        required: true,
-    },
     owner:{
         type:String,
         required:true,

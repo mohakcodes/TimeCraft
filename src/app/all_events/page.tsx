@@ -54,7 +54,6 @@ export default function page() {
             description: event.description,
             timeZone: event.timeZone,
             startDateTime: event.startDateTime,
-            endDateTime: event.endDateTime,
             owner: event.owner,
             eventId: event._id,
             userId: userId,
