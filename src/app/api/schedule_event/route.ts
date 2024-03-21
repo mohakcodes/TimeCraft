@@ -3,8 +3,15 @@ import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 import {v4 as uuid} from 'uuid';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 export async function POST(req: NextRequest) {
-    const {summary,description,startDateTime,endDateTime,timeZone,owner,eventId,userId} = await req.json();
+    const {summary,description,startDateTime,timeZone,owner,eventId,userId} = await req.json();
 
     const user = await axios.get(`http://localhost:3000/api/get_user/${userId}`);
     const getEvent = await axios.get(`http://localhost:3000/api/all_events/${eventId}`);
@@ -21,16 +28,17 @@ export async function POST(req: NextRequest) {
         auth: oauth2Client,
     });
 
+    //startTime is already in timezone of user, getting end time
+    const endDateTime = dayjs(startDateTime).add(1, 'hour').format();
+
     const event = {
         summary: summary,
         description: description,
         start:{
-            dateTime:startDateTime,
-            timeZone: timeZone,
+            dateTime: startDateTime,
         },
         end:{
-            dateTime:endDateTime,
-            timeZone: timeZone,
+            dateTime: endDateTime,
         },
         conferenceData:{
             createRequest:{
@@ -59,23 +67,6 @@ export async function POST(req: NextRequest) {
         conferenceDataVersion: 1,
         requestBody: event,
     });
-
-    // const eventId = response.data.id;
-    // console.log("Event created:", eventId);
-    // console.log("Organizer:", owner);
-
-    // if (eventId) {
-    //     await calendar.events.patch({
-    //         calendarId: "primary",
-    //         eventId: eventId,
-    //         auth: oauth2Client,
-    //         requestBody: {
-    //             creator: {
-    //                 email: owner,
-    //             },
-    //         }
-    //     });
-    // }
 
     return NextResponse.json("Event scheduled successfully");
 }

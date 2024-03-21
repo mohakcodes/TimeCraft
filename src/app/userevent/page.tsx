@@ -4,29 +4,30 @@ import { useUserIdStore } from '@/utils/store';
 import axios from 'axios';
 import React, {useState} from 'react'
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 export default function page() {
 
   const {userId} = useUserIdStore();
-  console.log('userId->', userId);
 
   const [eventName, setEventName] = useState('');
   const [eventDesc, setEventDesc] = useState('');
 
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
+  const [startTime, setStartTime] = useState('');
 
   const createEvent = async() => {
     const randomId = generateRandomId();
 
-    const divideDate = selectedDate.split('/');
-    const correctDate = divideDate.reverse().join('-');
-    const startHr = selectedTime.split(':')[0];
+    //convert UTC start time to current timezone
+    const timeZoneOfUser = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    dayjs.tz.setDefault(timeZoneOfUser);
+    const localeStartTime = dayjs(startTime).tz(timeZoneOfUser).format();
 
-    const end_Hr = parseInt(startHr) + 1;
-    const endHr = end_Hr < 10 ? '0'+end_Hr : end_Hr;
-
-    const startTime = `${correctDate}T${startHr}:00:00.000Z`;
-    const endTime = `${correctDate}T${endHr}:00:00.000Z`;
     try {
         const user = await axios.get(`/api/get_user/${userId}`);
         const res = await axios.post('/api/create_event', {
@@ -34,8 +35,7 @@ export default function page() {
             description: eventDesc,
             timeZone: "Asia/Kolkata",
             eventLink: `http://localhost:3000/schedule_event/${randomId}`,
-            startDateTime: startTime,
-            endDateTime: endTime,
+            startDateTime: localeStartTime,
             owner: user.data.user.email,
             flag: true,
             access_token: user.data.user.access_token,
@@ -44,27 +44,6 @@ export default function page() {
     } catch (error) {
         console.error('Error:', error);
     }
-  }
-
-  const generateDateOptions = () => {
-    const dates = [];
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const formattedDate = date.toLocaleDateString('en-GB');
-      dates.push(formattedDate);
-    }
-    return dates;
-  };
-
-  const generateTimeOptions = () => {
-    const times = [];
-    for (let i = 0; i < 24; i++) {
-        const time = `${i < 10 ? '0'+i : i}:00 - ${i+1 < 10 ? '0'+(i+1) : i+1}:00`;
-        times.push(time);
-    }
-    return times;
   }
 
   return (
@@ -96,34 +75,15 @@ export default function page() {
                 </div>
             </div>
             <div className='flex flex-col items-center'>
-                <div>
-                    <h2>Select Date</h2>
-                </div>
-                <div>
-                    <select onChange={(e) => setSelectedDate(e.target.value)}>
-                    <option value=''>Select Date</option>
-                    {generateDateOptions().map((date, index) => (
-                        <option key={index} value={date}>
-                        {date}
-                        </option>
-                    ))}
-                    </select>
-                </div>
-            </div>
-            <div className='flex flex-col items-center'>
-                <div>
-                    Select Time Slot
-                </div>
-                <div>
-                    <select onChange={(e) => setSelectedTime(e.target.value)}>
-                    <option value=''>Select Time</option>
-                    {generateTimeOptions().map((time, index) => (
-                        <option key={index} value={time}>
-                        {time}
-                        </option>
-                    ))}
-                    </select>
-                </div>
+                <label htmlFor="startTime">Start Time:</label>
+                <input
+                    type="datetime-local"
+                    id="startTime"
+                    name="startTime"
+                    value={startTime}
+                    onChange={(e)=>{setStartTime(e.target.value)}}
+                    required
+                />
             </div>
         </div>
         <button className='p-2 m-2 bg-slate-200' onClick={createEvent}>Create</button>
