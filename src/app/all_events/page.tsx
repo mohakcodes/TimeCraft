@@ -48,7 +48,6 @@ export default function page() {
 
   const BookEvent = async(e:any,event:any) => {
     e.preventDefault();
-    const user = await axios.get(`/api/get_user/${userId}`);
     try {
         const res = await axios.post('/api/schedule_event', {
             summary: event.summary,
@@ -57,9 +56,8 @@ export default function page() {
             startDateTime: event.startDateTime,
             endDateTime: event.endDateTime,
             owner: event.owner,
-            attendee: user.data.user.email,
-            oauth2Client: user.data.user.oauth2Client,
-            calendar: user.data.user.calendar
+            eventId: event._id,
+            userId: userId,
         });
         console.log('event post result', res);
     } 

@@ -7,5 +7,9 @@ connectDB();
 export async function GET(req: NextRequest) {
     //get all events
     const res = await Event.find({flag:true});
-    return NextResponse.json(res);
+    const sendevent = res.map(event => {
+        const { access_token, ...sanitizedEvent } = event.toObject();
+        return sanitizedEvent;
+    });
+    return NextResponse.json(sendevent);
 }

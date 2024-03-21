@@ -16,5 +16,5 @@ export function GET(req: NextRequest) {
         include_granted_scopes: true
     });
     
-    return NextResponse.json({url, oauth2Client});
+    return NextResponse.json({url});
 }

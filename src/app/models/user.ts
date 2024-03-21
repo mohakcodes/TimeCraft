@@ -10,13 +10,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  oauth2Client: {
-    type: Object,
+  access_token: {
+    type: String,
     required: true
-  },
-  calendar: {
-    type: Object,
-    required: true  
   }
 });
 

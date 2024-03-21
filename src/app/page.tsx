@@ -12,7 +12,6 @@ export default function page() {
     try {
       const res = await axios.get('api/google');
       console.log("res",res.data);
-      localStorage.setItem('oauth2Client', JSON.stringify(res.data.oauth2Client));
       router.push(res.data.url);
     } 
     catch (error) {

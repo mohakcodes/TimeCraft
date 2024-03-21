@@ -8,11 +8,7 @@ export const oauth2Client = new google.auth.OAuth2(
 
 export const scopes = [
     "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/calendar.events",
     "openid",
     "email",
 ];
-
-// export const calendar = google.calendar({
-//     version: "v3",
-//     auth: oauth2Client,
-// })

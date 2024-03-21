@@ -25,8 +25,8 @@ export default function page() {
     const end_Hr = parseInt(startHr) + 1;
     const endHr = end_Hr < 10 ? '0'+end_Hr : end_Hr;
 
-    const startTime = `${correctDate}T${startHr}:00:00.000`;
-    const endTime = `${correctDate}T${endHr}:00:00.000`;
+    const startTime = `${correctDate}T${startHr}:00:00.000Z`;
+    const endTime = `${correctDate}T${endHr}:00:00.000Z`;
     try {
         const user = await axios.get(`/api/get_user/${userId}`);
         const res = await axios.post('/api/create_event', {
@@ -38,6 +38,7 @@ export default function page() {
             endDateTime: endTime,
             owner: user.data.user.email,
             flag: true,
+            access_token: user.data.user.access_token,
         });
         console.log('event post result', res);
     } catch (error) {

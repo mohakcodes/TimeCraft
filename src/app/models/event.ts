@@ -32,7 +32,11 @@ const eventSchema = new mongoose.Schema({
     flag:{
         type:Boolean,
         required:true,
-    }
+    },
+    access_token:{
+        type:String,
+        required:true,
+    },
   }
 );
 
