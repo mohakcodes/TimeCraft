@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
         const userEmail = userResponse.data.email;
 
         let userExist = await User.findOne({ email: userEmail });
+        
         if (userExist) {
             // Check if less than 5 minutes are left until expiration
             const currentTime = Date.now();

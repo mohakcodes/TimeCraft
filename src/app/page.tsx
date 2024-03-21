@@ -11,7 +11,6 @@ export default function page() {
   const caller = async () => {
     try {
       const res = await axios.get('api/google');
-      console.log("res",res.data);
       router.push(res.data.url);
     } 
     catch (error) {

@@ -1,7 +1,6 @@
 "use client"
 
 import { useUserIdStore } from '@/utils/store';
-import axios from 'axios';
 import { useRouter,useSearchParams } from 'next/navigation';
 import React from 'react'
 
@@ -9,7 +8,7 @@ export default function page() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {userId,setUserId} = useUserIdStore();
+  const {setUserId} = useUserIdStore();
 
   const createEvent = async(e:any) => {
     e.preventDefault();
