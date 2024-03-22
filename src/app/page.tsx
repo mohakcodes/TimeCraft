@@ -19,11 +19,14 @@ export default function page() {
   };
 
   return (
-    <div className='flex flex-col items-center my-auto mt-5'>
-      <div>
-        Welcome, Schedule your meetings with TIMECRAFT 
+    <div className='flex flex-col items-center justify-center h-screen bg-purple-600'>
+      <div className="text-center text-4xl text-white font-bold">
+        Schedule your meetings with TIMECRAFT
       </div>
-      <button className='bg-slate-100 rounded-md p-2' onClick={caller}>Login With <span className='text-green-500'>Google</span></button>
+      <button className='bg-slate-100 rounded-md p-2 mt-3 font-semibold font-xl' onClick={caller}>
+        <p className='text-2xl'>Login With <span className='text-blue-600'>Google</span></p>
+      </button>
     </div>
   );
+  
 }

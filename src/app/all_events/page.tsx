@@ -66,24 +66,54 @@ export default function page() {
   }
 
   return (
-    <div className='text-center'>
-        <h1 className='text-2xl font-bold mt-2'>All Events</h1>
-        <div>
+    <div className='text-center min-h-screen bg-purple-600 pb-4'>
+        <div className='flex justify-around'>
+          <h1 className='text-2xl font-bold text-white p-4'>All Events</h1>
+          <a href="/homepage" className='my-auto px-4 py-1 text-black bg-purple-100'>Back</a>
+        </div>
+        <div className='flex flex-col'>
             {events.map((event:any, index:number) => {
                 return(
-                    <div key={index} className='bg-gray-200 p-4 m-2'>
-                        <p className='text-xl font-bold'>{event.summary}</p>
-                        <p className='text-lg'>{event.description}</p>
-                        <p className='text-lg'>Date - {formatDate(event.startDateTime)}</p>
-                        <p className='text-lg'>Starts From - {formatTime(event.startDateTime)}</p>
-                        <p className='text-lg'>Duration - 1 Hour</p>
-                        <p className='text-lg'>Organizer - {event.owner}</p>
+                    <div 
+                      className=" bg-white border-2 border-white mt-2 mx-auto px-8 sm:py-0 w-[70%] sm:w-[65%] md:w-[50%] lg:w-[50%] rounded-lg shadow-lg p-4" 
+                      key={index}
+                    >
+                      <dl className="-my-3 divide-y divide-gray-100 text-sm sm:py-3 py-1">
+                        <div className="flex sm:flex-row flex-col">
+                          <dt className="text-left w-[30%] font-medium text-gray-900">Event Title</dt>
+                          <dd className="w-[70%] text-left text-gray-700">{event.summary}</dd>
+                        </div>
+
+                        <div className="flex sm:flex-row flex-col">
+                          <dt className="text-left w-[30%] font-medium text-gray-900">Description</dt>
+                          <dd className="w-[70%] text-left text-gray-700">
+                            {event.description}
+                          </dd>
+                        </div>
+
+                        <div className="flex sm:flex-row flex-col">
+                          <dt className="text-left w-[30%] font-medium text-gray-900">Organizer</dt>
+                          <dd className="w-[70%] text-left text-gray-700">{event.owner}</dd>
+                        </div>
+
+                        <div className="flex sm:flex-row flex-col">
+                          <dt className="text-left w-[30%] font-medium text-gray-900">Start From</dt>
+                          <dd className="w-[70%] text-left text-gray-700">{formatDate(event.startDateTime)}, {formatTime(event.startDateTime)}</dd>
+                        </div>
+
+                        <div className="flex sm:flex-row flex-col">
+                          <dt className="text-left w-[30%] font-medium text-gray-900">Duration</dt>
+                          <dd className="w-[70%] text-left text-gray-700">1 Hour</dd>
+                        </div>
+
                         <button 
-                            className='bg-blue-100 p-1 rounded-lg border-2 border-black'
-                            onClick={(e)=>BookEvent(e,event)}
+                          className='bg-blue-200 py-1 px-4 m-2 rounded-lg border-2 flex text-left border-black'
+                          onClick={(e)=>BookEvent(e,event)}
                         >
-                            Book
+                          Book
                         </button>
+
+                      </dl>
                     </div>
                 )
             })}

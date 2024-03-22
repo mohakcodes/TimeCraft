@@ -25,10 +25,13 @@ export default function page() {
   }
 
   return (
-    <div className='flex flex-col items-center'>
-        <h1 className='flex items-center text-black text-2xl'>Welcome to the homepage</h1>
-        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={(e)=>createEvent(e)}>Create Event</button>
-        <button className='p-2 m-2 bg-slate-300 rounded-lg' onClick={(e)=>getAllEvents(e)}>All Events</button>
+    <div className='flex flex-col items-center justify-center h-screen bg-purple-600'>
+      <h1 className='text-white text-4xl font-bold mb-2'>Create or Schedule the Event</h1>
+      <div className='flex'>
+        <button className='p-2 m-2 bg-white font-semibold rounded-lg' onClick={(e) => createEvent(e)}>Create Event</button>
+        <button className='p-2 m-2 bg-white font-semibold rounded-lg' onClick={(e) => getAllEvents(e)}>All Events</button>
+      </div>
     </div>
-  )
+  );
+  
 }

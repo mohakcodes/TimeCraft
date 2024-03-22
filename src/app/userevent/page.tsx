@@ -7,11 +7,14 @@ import React, {useState} from 'react'
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useRouter } from 'next/navigation';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function page() {
+
+  const router = useRouter();
 
   const {userId} = useUserIdStore();
 
@@ -39,52 +42,52 @@ export default function page() {
             userId: userId,
         });
         console.log('event post result', res);
+        router.push('/all_events');
+
     } catch (error) {
         console.error('Error:', error);
     }
   }
 
   return (
-    <div className='flex flex-col items-center'>
-        <h1 className='text-2xl mt-3 font-bold'>Fill Event Details Below</h1>
-        <div className='bg-gray-200 p-4 w-[50%]'>
-            <div className='flex flex-col items-center'>
-                <div>
-                    Location: Google Meet
-                </div>
-                <div>
-                    Duration: 30 minutes
-                </div>
-            </div>
-            <div className='flex flex-col items-center'>
-                <div>
-                    <h2>Event Name</h2>
-                </div>
-                <div>
-                    <input type="text" onChange={(e)=>{setEventName(e.target.value)}}/>
-                </div>
-            </div>
-            <div className='flex flex-col items-center'>
-                <div>
-                    <h2>Event Description</h2>
-                </div>
-                <div>
-                    <input type="text" onChange={(e)=>{setEventDesc(e.target.value)}}/>
-                </div>
-            </div>
-            <div className='flex flex-col items-center'>
-                <label htmlFor="startTime">Start Time:</label>
-                <input
-                    type="datetime-local"
-                    id="startTime"
-                    name="startTime"
-                    value={startTime}
-                    onChange={(e)=>{setStartTime(e.target.value)}}
-                    required
-                />
-            </div>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-purple-600'>
+      <h1 className='text-2xl mb-3 text-white font-bold'>Fill Event Details Below</h1>
+      <div className='bg-gray-200 p-6 rounded-lg shadow-lg'>
+        <div className='space-y-3'>
+          <div>
+            <p className='text-lg text-gray-800'>
+              Location: Google Meet
+            </p>
+            <p className='text-lg text-gray-800'>
+              Duration: 30 minutes
+            </p>
+          </div>
+          <div className='space-y-1'>
+            <h2 className='text-lg font-semibold text-gray-900'>Event Name</h2>
+            <input type="text" className='input-field' onChange={(e)=>{setEventName(e.target.value)}}/>
+          </div>
+          <div className='space-y-1'>
+            <h2 className='text-lg font-semibold text-gray-900'>Event Description</h2>
+            <input type="text" className='input-field' onChange={(e)=>{setEventDesc(e.target.value)}}/>
+          </div>
+          <div className='space-y-1'>
+            <label htmlFor="startTime" className='text-lg font-semibold text-gray-900'>Start Time:</label>
+            <br />
+            <input
+              type="datetime-local"
+              id="startTime"
+              name="startTime"
+              value={startTime}
+              onChange={(e)=>{setStartTime(e.target.value)}}
+              className='input-field'
+              required
+            />
+          </div>
         </div>
-        <button className='p-2 m-2 bg-slate-200' onClick={createEvent}>Create</button>
+      </div>
+      <button className='px-6 py-2 mt-4 rounded-md bg-slate-200 text-xl font-semibold shadow-md hover:bg-slate-300 transition duration-300' onClick={createEvent}>Create</button>
+      <a href="/homepage" className='px-4 py-1 mt-2 text-black rounded-md bg-purple-100'>Back</a>
     </div>
-  )
+  );
+  
 }
